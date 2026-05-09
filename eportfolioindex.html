@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LJ Marcera — SusAg 2 ePortfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Special+Elite&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --green: #3d7a3f;
+    --green-light: #6aab6d;
+    --green-pale: #d4edda;
+    --yellow: #f5c842;
+    --yellow-pale: #fff8dc;
+    --pink: #f7a8b8;
+    --pink-pale: #fff0f3;
+    --cream: #faf8f2;
+    --paper: #fffef9;
+    --ink: #2a2a2a;
+    --ink-light: #555;
+    --receipt-width: 360px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--green-pale);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ═══════════════════ TITLE PAGE ═══════════════════ */
+  #title-page {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100vh;
+    background: linear-gradient(160deg, #e8f5e9 0%, #f9fbe7 40%, #fce4ec 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    transition: transform 0.7s cubic-bezier(0.77,0,0.18,1);
+  }
+  #title-page.slide-away {
+    transform: translateY(-100%);
+  }
+
+  .title-deco {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    font-size: 28px;
+  }
+
+  .title-box {
+    background: white;
+    border: 2.5px solid var(--green);
+    border-radius: 18px;
+    padding: 32px 40px;
+    text-align: center;
+    max-width: 480px;
+    width: 90%;
+    box-shadow: 0 8px 40px rgba(61,122,63,0.13), 6px 6px 0 var(--yellow);
+    position: relative;
+  }
+
+  .title-sticker {
+    font-size: 22px;
+    position: absolute;
+  }
+  .title-sticker.tl { top: -18px; left: 14px; transform: rotate(-15deg); }
+  .title-sticker.tr { top: -14px; right: 14px; transform: rotate(12deg); }
+  .title-sticker.bl { bottom: -16px; left: 18px; transform: rotate(10deg); }
+  .title-sticker.br { bottom: -16px; right: 18px; transform: rotate(-12deg); }
+
+  .title-course {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .title-name {
+    font-family: 'Caveat', cursive;
+    font-size: 38px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.1;
+  }
+  .title-sub {
+    font-size: 13px;
+    color: var(--ink-light);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* Photo frame placeholder on title */
+  .title-photo-frame {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    border: 3px dashed var(--pink);
+    background: var(--pink-pale);
+    margin: 14px auto 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 32px;
+    overflow: hidden;
+  }
+  .title-photo-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .print-btn {
+    margin-top: 22px;
+    background: var(--green);
+    color: white;
+    border: none;
+    padding: 13px 36px;
+    border-radius: 50px;
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #2a5c2c, 0 6px 20px rgba(61,122,63,0.25);
+    transition: transform 0.1s, box-shadow 0.1s;
+    letter-spacing: 1px;
+  }
+  .print-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #2a5c2c, 0 8px 24px rgba(61,122,63,0.3);
+  }
+  .print-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #2a5c2c;
+  }
+  .print-hint {
+    font-size: 11px;
+    color: var(--ink-light);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* ═══════════════════ PRINTER MACHINE ═══════════════════ */
+  #printer-wrap {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none;
+  }
+
+  .printer-body {
+    width: 340px;
+    background: white;
+    border: 2.5px solid #ccc;
+    border-radius: 14px 14px 0 0;
+    padding: 18px 24px 12px;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.12);
+    position: relative;
+  }
+  .printer-top-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .printer-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .printer-dot.green { background: var(--green-light); }
+  .printer-dot.yellow { background: var(--yellow); }
+  .printer-dot.pink { background: var(--pink); }
+  .printer-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 10px;
+    color: #aaa;
+    letter-spacing: 2px;
+    text-align: center;
+    margin-top: 6px;
+  }
+  .printer-slot {
+    background: #eee;
+    height: 8px;
+    border-radius: 4px;
+    width: 80%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .printer-slot::after {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+    animation: slot-shine 2s infinite;
+  }
+  @keyframes slot-shine {
+    0% { left: -100%; }
+    100% { left: 200%; }
+  }
+  .printer-plants-unused { display: none; }
+
+  /* ═══════════════════ RECEIPT / PAPER ═══════════════════ */
+  #receipt-container {
+    position: relative;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 40px;
+    padding-bottom: 200px;
+    min-height: 100vh;
+  }
+
+  /* The paper stub sticking out of printer initially */
+  #paper-stub {
+    width: var(--receipt-width);
+    background: var(--paper);
+    border-left: 1.5px solid #e0ddd5;
+    border-right: 1.5px solid #e0ddd5;
+    padding: 12px 20px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #paper-stub .stub-pattern {
+    font-family: 'Special Elite', monospace;
+    font-size: 9px;
+    color: #ccc;
+    letter-spacing: 2px;
+    border-bottom: 1px dashed #ddd;
+    padding-bottom: 8px;
+    margin-bottom: 8px;
+  }
+
+  /* ═══════════════════ RECEIPT PAPER ═══════════════════ */
+  #receipt {
+    width: var(--receipt-width);
+    background: var(--paper);
+    border-left: 1.5px solid #e0ddd5;
+    border-right: 1.5px solid #e0ddd5;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Sections of the receipt */
+  .receipt-section {
+    padding: 20px 22px;
+    border-bottom: 1px dashed #ddd;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .receipt-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .receipt-header {
+    text-align: center;
+    padding: 22px 22px 18px;
+    border-bottom: 2px dashed var(--green-light);
+    background: var(--yellow-pale);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .receipt-header.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .receipt-header .store-name {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--green);
+  }
+  .receipt-header .store-sub {
+    font-family: 'Special Elite', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: #888;
+    margin-top: 2px;
+  }
+  .receipt-header .receipt-title {
+    font-family: 'Special Elite', monospace;
+    font-size: 13px;
+    color: var(--ink);
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+    padding: 5px 0;
+    letter-spacing: 1px;
+  }
+
+  .section-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--green-pale);
+  }
+
+  .receipt-text {
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.7;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .receipt-h2 {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+  .receipt-h3 {
+    font-family: 'Special Elite', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--ink);
+    margin: 10px 0 4px;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* Photo frame placeholder */
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 4/3;
+    border: 2px dashed #c8c0b0;
+    border-radius: 6px;
+    background: #f8f6f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 8px 0;
+    font-size: 28px;
+    color: #bbb;
+    position: relative;
+  }
+  .photo-frame-label {
+    font-family: 'Special Elite', monospace;
+    font-size: 10px;
+    color: #bbb;
+    margin-top: 6px;
+    letter-spacing: 1px;
+  }
+  .photo-frame-caption {
+    font-size: 10px;
+    color: var(--ink-light);
+    font-style: italic;
+    text-align: center;
+    margin-top: 4px;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+  }
+
+  /* TOC */
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 0;
+    font-size: 12px;
+    padding: 3px 0;
+    color: var(--ink);
+  }
+  .toc-title { flex-shrink: 0; }
+  .toc-dots {
+    flex: 1;
+    border-bottom: 1px dotted #ccc;
+    margin: 0 4px;
+    height: 12px;
+  }
+  .toc-num { flex-shrink: 0; font-family: 'Special Elite', monospace; font-size: 11px; }
+
+  /* Plant tags */
+  .plant-tag {
+    display: inline-block;
+    background: var(--green-pale);
+    color: var(--green);
+    border: 1px solid var(--green-light);
+    border-radius: 20px;
+    padding: 2px 10px;
+    font-size: 11px;
+    margin: 2px 2px;
+    font-family: 'Special Elite', monospace;
+  }
+
+  /* Receipt bottom */
+  .receipt-bottom {
+    text-align: center;
+    padding: 20px 22px 30px;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.4s, transform 0.4s;
+  }
+  .receipt-bottom.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .receipt-bottom .thank-you {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .receipt-bottom .barcode {
+    font-family: 'Special Elite', monospace;
+    font-size: 9px;
+    letter-spacing: 4px;
+    color: #bbb;
+    margin: 8px 0;
+  }
+
+  .end-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 18px;
+    flex-wrap: wrap;
+  }
+  .end-btn {
+    padding: 10px 18px;
+    border-radius: 30px;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    cursor: pointer;
+    border: 2px solid var(--green);
+    background: white;
+    color: var(--green);
+    transition: all 0.2s;
+  }
+  .end-btn.primary {
+    background: var(--green);
+    color: white;
+  }
+  .end-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(61,122,63,0.2);
+  }
+
+  /* Rating popup */
+  #rating-popup {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0.8);
+    background: white;
+    border: 2.5px solid var(--green);
+    border-radius: 20px;
+    padding: 28px 32px;
+    text-align: center;
+    z-index: 999;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.2), 6px 6px 0 var(--yellow);
+    transition: transform 0.3s, opacity 0.3s;
+    opacity: 0;
+    min-width: 280px;
+  }
+  #rating-popup.show {
+    display: block;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  #rating-popup h3 {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: var(--green);
+    margin-bottom: 14px;
+  }
+  .stars {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 14px;
+  }
+  .star-btn {
+    font-size: 32px;
+    cursor: pointer;
+    background: none;
+    border: none;
+    transition: transform 0.2s;
+    filter: grayscale(1);
+  }
+  .star-btn:hover, .star-btn.lit {
+    filter: grayscale(0);
+    transform: scale(1.2);
+  }
+  .rating-msg {
+    font-family: 'Caveat', cursive;
+    font-size: 26px;
+    min-height: 36px;
+    color: var(--ink);
+    transition: opacity 0.3s;
+  }
+  .close-rating {
+    margin-top: 12px;
+    font-size: 12px;
+    color: #aaa;
+    cursor: pointer;
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  #overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.3);
+    z-index: 998;
+  }
+
+  /* Receipt paper edge - jagged bottom */
+  .paper-edge {
+    width: var(--receipt-width);
+    height: 16px;
+    background: var(--paper);
+    border-left: 1.5px solid #e0ddd5;
+    border-right: 1.5px solid #e0ddd5;
+    clip-path: polygon(
+      0% 0%, 3% 100%, 6% 0%, 9% 100%, 12% 0%, 15% 100%,
+      18% 0%, 21% 100%, 24% 0%, 27% 100%, 30% 0%, 33% 100%,
+      36% 0%, 39% 100%, 42% 0%, 45% 100%, 48% 0%, 51% 100%,
+      54% 0%, 57% 100%, 60% 0%, 63% 100%, 66% 0%, 69% 100%,
+      72% 0%, 75% 100%, 78% 0%, 81% 100%, 84% 0%, 87% 100%,
+      90% 0%, 93% 100%, 96% 0%, 100% 100%, 100% 0%
+    );
+  }
+
+  /* Scroll to top btn */
+  #scroll-top-wrap {
+    position: fixed;
+    bottom: 160px;
+    right: 20px;
+    z-index: 60;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  #scroll-top-tooltip {
+    background: white;
+    color: var(--green);
+    border: 1.5px solid var(--green-light);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-family: 'Caveat', cursive;
+    font-size: 13px;
+    white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    animation: tooltip-bounce 2s ease-in-out infinite;
+    pointer-events: none;
+  }
+  @keyframes tooltip-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+  }
+  #scroll-top {
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px; height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: transform 0.2s;
+  }
+  #scroll-top:hover { transform: scale(1.1); }
+
+  /* Printing animation */
+  @keyframes paper-feed {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-20px); }
+  }
+
+  .printing-indicator {
+    font-family: 'Special Elite', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--green-light);
+    text-align: center;
+    padding: 8px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Nav dots */
+  #nav-dots {
+    position: fixed;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 60;
+    display: none;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #ccc;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .nav-dot.active {
+    background: var(--green);
+    transform: scale(1.4);
+  }
+
+  /* Watermark-style deco behind receipt */
+  .bg-deco {
+    position: fixed;
+    font-size: 100px;
+    opacity: 0.04;
+    pointer-events: none;
+    z-index: 1;
+    user-select: none;
+  }
+  .bg-deco.d1 { top: 10%; left: 5%; transform: rotate(-20deg); }
+  .bg-deco.d2 { bottom: 20%; right: 5%; transform: rotate(15deg); }
+
+</style>
+</head>
+<body>
+
+<div class="bg-deco d1">🌿</div>
+<div class="bg-deco d2">🌱</div>
+
+<!-- ═══ TITLE PAGE ═══ -->
+<div id="title-page">
+  <div class="title-deco">🌿🌸🌾🌻🍃</div>
+  <div class="title-box">
+    <div class="title-sticker tl">🌱</div>
+    <div class="title-sticker tr">🌸</div>
+    <div class="title-sticker bl">🍅</div>
+    <div class="title-sticker br">🌿</div>
+
+    <div class="title-course">Sustainable Agriculture 2 · CBSUA · 2025–2026</div>
+
+    <div class="title-photo-frame">
+      <img src="Gemini_Generated_Image_8qusl78qusl78qus.png" alt="LJ Marcera" onerror="this.style.display='none';this.parentElement.innerHTML='🌸'"/>
+    </div>
+
+    <div class="title-name">Lovely Joy E. Marcera</div>
+    <div class="title-sub">BSE Science · 1st Year · ePortfolio</div>
+
+    <button class="print-btn" onclick="startPrinting()">🖨️ Print me!</button>
+    <div class="print-hint">click to start printing the eportfolio ↓</div>
+  </div>
+  <div style="margin-top:18px; font-size:13px; color:#aaa; font-style:italic;">
+    🌾 &nbsp; Central Bicol State University of Agriculture &nbsp; 🌾
+  </div>
+</div>
+
+<!-- ═══ PRINTER MACHINE ═══ -->
+<div id="printer-wrap">
+  <div id="paper-stub">
+    <div class="stub-pattern">✦ ✦ ✦ CBSUA · SUS AG 2 · 2026 ✦ ✦ ✦</div>
+    <div id="printing-status" class="printing-indicator" style="display:none;">PRINTING...</div>
+  </div>
+  <div class="printer-body">
+    <div class="printer-top-bar">
+      <div class="printer-dot green"></div>
+      <div class="printer-dot yellow"></div>
+      <div class="printer-dot pink"></div>
+      <span style="margin-left:8px;font-size:16px;">🌿🌱</span>
+    </div>
+    <div class="printer-slot"></div>
+    <div class="printer-label">LJ-EPORTFOLIO-PRINTER</div>
+  </div>
+</div>
+
+<!-- ═══ RECEIPT CONTENT ═══ -->
+<div id="receipt-container" style="display:none;">
+
+  <!-- Paper coming out top -->
+  <div id="receipt">
+
+    <!-- HEADER -->
+    <div class="receipt-header" data-section="0">
+      <div class="store-name">🌱 LJ's Garden Portfolio</div>
+      <div class="store-sub">CBSUA · COLLEGE OF EDUCATION · BSE SCIENCE</div>
+      <div class="receipt-title">✦ SUSTAINABLE AGRICULTURE 2 · ePortfolio ✦</div>
+      <div style="font-family:'Special Elite',monospace;font-size:10px;color:#aaa;margin-top:6px;">
+        AY 2025–2026 · Sta. Cruz, Calabanga, Camarines Sur
+      </div>
+    </div>
+
+    <!-- I. PRELIMINARIES -->
+    <div class="receipt-section" data-section="1">
+      <div class="section-label">I · Preliminaries</div>
+
+      <!-- Preface -->
+      <div class="receipt-h2">✦ Preface</div>
+      <p class="receipt-text">This ePortfolio documents my experience in Sustainable Agriculture 2 as a first-year BSE Science student at CBSUA. What started as a class requirement grew into a meaningful journey of learning, patience, and hands-on discovery. Through our school garden project, I gained a deeper appreciation for sustainable living, food production, and the environment. This portfolio captures the challenges, efforts, and growth — both of the plants we nurtured and of myself as a student.</p>
+    </div>
+
+    <!-- Acknowledgment -->
+    <div class="receipt-section" data-section="2">
+      <div class="receipt-h2">✦ Acknowledgment</div>
+      <p class="receipt-text">I would like to express my sincere gratitude to our Sustainable Agriculture 2 instructor, <strong>Ma'am Michelle Bayos Ballesteros</strong>, for the guidance and knowledge shared throughout this course. Her dedication made this experience both educational and truly memorable.</p>
+      <br/>
+      <p class="receipt-text">To my entire class — thank you for being part of this journey. To those who consistently showed up, watered the plants, and gave their time and effort, your dedication made a real difference. To those who were unable to fulfill their garden responsibilities, I hope that this experience planted something in you — a seed of responsibility, perhaps, that will bloom in its own time. 🌱</p>
+      <br/>
+      <p class="receipt-text">To CBSUA, for providing us a space where learning goes beyond textbooks — the garden in front of the Science Building became one of my most valuable classrooms this semester. And to my family, for their unwavering love and support throughout my first year in college.</p>
+    </div>
+
+    <!-- Table of Contents -->
+    <div class="receipt-section" data-section="3">
+      <div class="receipt-h2">✦ Table of Contents</div>
+      <div style="margin-top:8px;">
+        <div class="toc-item"><span class="toc-title">I. Preliminaries</span><span class="toc-dots"></span><span class="toc-num">✦</span></div>
+        <div class="toc-item" style="padding-left:14px;font-size:11px;color:#777;"><span>a. Preface &nbsp; b. Acknowledgment &nbsp; c. TOC &nbsp; d. About the Author</span></div>
+        <div class="toc-item" style="margin-top:5px;"><span class="toc-title">II. Narration</span><span class="toc-dots"></span><span class="toc-num">✦</span></div>
+        <div class="toc-item" style="padding-left:14px;font-size:11px;color:#777;"><span>a. Preparation &nbsp; b. Management &nbsp; c. Harvest &nbsp; d. Reflections</span></div>
+        <div class="toc-item" style="margin-top:5px;"><span class="toc-title">III. Documentations</span><span class="toc-dots"></span><span class="toc-num">✦</span></div>
+        <div class="toc-item" style="margin-top:5px;"><span class="toc-title">IV. Appendices</span><span class="toc-dots"></span><span class="toc-num">✦</span></div>
+      </div>
+    </div>
+
+    <!-- About the Author -->
+    <div class="receipt-section" data-section="4">
+      <div class="receipt-h2">✦ About the Author</div>
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:10px;">
+        <div style="width:70px;height:70px;border-radius:10px;border:2px dashed var(--pink);background:var(--pink-pale);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;">
+          <img src="Gemini_Generated_Image_8qusl78qusl78qus.png" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none';this.parentElement.innerHTML='🌸'"/>
+        </div>
+        <div>
+          <div style="font-family:'Caveat',cursive;font-size:18px;font-weight:700;color:var(--ink);">Lovely Joy E. Marcera</div>
+          <div style="font-family:'Special Elite',monospace;font-size:10px;color:var(--green);letter-spacing:1px;">BSE SCIENCE · 1ST YEAR · CBSUA</div>
+          <div style="font-size:11px;color:#888;margin-top:3px;">Student Assistant · Science Laboratory</div>
+        </div>
+      </div>
+      <p class="receipt-text">My name is Lovely Joy E. Marcera and I am a first-year Bachelor of Secondary Education major in Science student at CBSUA - Calabanga Campus. I also serve as a Student Assistant at the Science Laboratory, which happens to be located directly in front of our class garden — giving me the opportunity to tend to the plants even outside of regular class hours. This ePortfolio reflects my honest experience throughout Sustainable Agriculture 2 — the struggles, the growth, and everything in between.</p>
+    </div>
+
+    <!-- ── NARRATION DIVIDER ── -->
+    <div class="receipt-section" data-section="5" style="background:var(--green-pale);text-align:center;">
+      <div style="font-family:'Caveat',cursive;font-size:24px;color:var(--green);font-weight:700;">II · Narration 🌿</div>
+      <div style="font-size:11px;color:var(--green-light);font-style:italic;">The story of our school garden</div>
+    </div>
+
+    <!-- Preparation -->
+    <div class="receipt-section" data-section="6">
+      <div class="receipt-h2">a. Preparation of the Garden</div>
+
+      <div class="receipt-h3">Issues &amp; Concerns</div>
+      <p class="receipt-text">The garden plot in front of the Science Building was bare, dry, and littered with trash when we started. The soil was hard and compacted, and we had no dedicated water source — we had to fetch water from a nearby comfort room and borrow a watering can from the Science Lab. When the lab had classes, we used small bottles instead. Suspended classes also made it hard to coordinate activities consistently.</p>
+
+      <div class="receipt-h3">Solutions &amp; Recommendations</div>
+      <p class="receipt-text">We cleared the area, removed weeds, tilled the soil, and added rice husk as organic fertilizer. We grew plants at home first before transplanting — I personally grew one seedling at home and transferred it to the garden. We recommend establishing a clear duty schedule, securing a dedicated watering tool, and improving soil quality before planting begins.</p>
+    </div>
+
+    <!-- Management -->
+    <div class="receipt-section" data-section="7">
+      <div class="receipt-h2">b. Management of the Garden</div>
+
+      <div class="receipt-h3">Issues &amp; Concerns</div>
+      <p class="receipt-text">Maintaining the garden was challenging due to inconsistent attendance. On online class days, the garden was sometimes left unwatered for several days, causing some young seedlings to die. Some students also threw trash into the garden. Unequal participation meant only a few students carried most of the responsibility.</p>
+
+      <div class="receipt-h3">Solutions &amp; Recommendations</div>
+      <p class="receipt-text">We watered and monitored the plants on every available class day. As a Student Assistant in the nearby Science Lab, I personally watered the garden during my duty hours. We recommend assigned watering schedules covering non-class days, a sign discouraging littering, a stored water container near the garden, and consequences for students who skip their duties.</p>
+    </div>
+
+    <!-- Harvest -->
+    <div class="receipt-section" data-section="8">
+      <div class="receipt-h2">c. Harvest / Growth of Plants</div>
+
+      <div class="receipt-h3">Plants Grown</div>
+      <div style="margin:8px 0;">
+        <span class="plant-tag">🥬 Kangkong</span>
+        <span class="plant-tag">🍅 Kamatis</span>
+        <span class="plant-tag">🍆 Talong</span>
+        <span class="plant-tag">🌶️ Sili</span>
+        <span class="plant-tag">🌸 Orchids</span>
+        <span class="plant-tag">🌿 Foliage Plants</span>
+      </div>
+      <p class="receipt-text">We grew water spinach (kangkong), tomato (kamatis), eggplant (talong), and chili pepper (sili) as vegetable crops. For ornamentals, we planted orchids and several decorative foliage plants. All vegetables were started as seedlings at home before being transplanted to the school garden.</p>
+
+      <div class="receipt-h3">Health Benefits</div>
+      <p class="receipt-text">Kangkong is rich in iron, Vitamin A, and C. Tomatoes contain lycopene for heart health. Eggplant supports brain health through antioxidants. Chili peppers have anti-inflammatory capsaicin. Ornamental plants contribute to mental well-being by reducing stress and improving mood.</p>
+
+      <div class="receipt-h3">Environmental Advantages</div>
+      <p class="receipt-text">Our garden improved local air quality through photosynthesis and promoted healthier soil through organic amendments like rice husk. Green spaces attract pollinators, supporting campus biodiversity. Even a small school garden demonstrates that sustainable, eco-friendly practices are achievable at the community level.</p>
+    </div>
+
+    <!-- Reflections -->
+    <div class="receipt-section" data-section="9">
+      <div class="receipt-h2">d. Reflections / Insights</div>
+      <p class="receipt-text">This subject taught me more than I expected. Tending the garden — watering plants with small bottles, clearing trash others left behind, watching these plants bloom — gave me a sense of pride I had not anticipated. I learned patience, accountability, and genuine appreciation for where food comes from. As a future Science teacher, this experience reminded me that the best lessons often happen outside the classroom — in the dirt, under the sun, with your hands in the soil. 🌱</p>
+    </div>
+
+    <!-- ── DOCUMENTATIONS DIVIDER ── -->
+    <div class="receipt-section" data-section="10" style="background:var(--pink-pale);text-align:center;">
+      <div style="font-family:'Caveat',cursive;font-size:24px;color:#c06;font-weight:700;">III · Documentations 📸</div>
+      <div style="font-size:11px;color:#c88;font-style:italic;">Dated photos of garden activities</div>
+    </div>
+
+    <!-- Photo grid -->
+    <div class="receipt-section" data-section="11">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Clearing the garden plot</div>
+        </div>
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Tilling &amp; adding rice husk</div>
+        </div>
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Transplanting seedlings</div>
+        </div>
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Watering the plants</div>
+        </div>
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Monitoring plant growth</div>
+        </div>
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Removing trash</div>
+        </div>
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Harvesting vegetables</div>
+        </div>
+        <div>
+          <div class="photo-frame">📷<div class="photo-frame-label">PHOTO</div></div>
+          <div class="photo-frame-caption">📅 [Date] — Final state of garden</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── APPENDICES ── -->
+    <div class="receipt-section" data-section="12" style="background:var(--yellow-pale);">
+      <div class="section-label">IV · Appendices</div>
+      <div class="receipt-h2">✦ References</div>
+      <p class="receipt-text" style="font-size:11px;line-height:1.8;">
+        Fuglie, K., Dhehibi, B., &amp; El-Shahat, A. (2020). <em>The role of agricultural research in building sustainable food systems.</em> FAO.<br/>
+        Villareal, R. L. (1980). <em>Tomatoes in the tropics.</em> Westview Press.<br/>
+        Porcuna, J. L. (2012). <em>Agroecology and sustainable agriculture.</em> SEAE.<br/>
+        <span style="color:#aaa;font-style:italic;">* Add references from class handouts as needed.</span>
+      </p>
+      <div class="receipt-h2" style="margin-top:14px;">✦ Other Supporting Documents</div>
+      <p class="receipt-text" style="font-size:12px;">
+        • Class Syllabus — Sustainable Agriculture 2<br/>
+        • Group Duty Schedule / Attendance Records<br/>
+        • Activity Sheets submitted during the semester<br/>
+        • Class Syllabus QR Code
+      </p>
+    </div>
+
+    <!-- BOTTOM / END -->
+    <div class="receipt-bottom" data-section="13">
+      <div class="thank-you">salamat sa pagbisita! 🌿</div>
+      <div style="font-size:11px;color:#aaa;font-family:'Special Elite',monospace;">Lovely Joy E. Marcera · BSE Science · CBSUA</div>
+      <div style="font-size:10px;color:#aaa;font-style:italic;margin-top:4px;">Sustainable Agriculture 2 · AY 2025–2026</div>
+      <div class="barcode">| | ||| || | ||| || | | || ||| | | || | |</div>
+      <div style="font-family:'Special Elite',monospace;font-size:9px;color:#ccc;letter-spacing:3px;">LJ-MARCERA-SUSAG2-2026</div>
+
+      <div class="end-buttons">
+        <button class="end-btn primary" onclick="backToTitle()">↑ Back to title</button>
+        <button class="end-btn" onclick="showRating()">⭐ Rate this</button>
+      </div>
+    </div>
+
+  </div><!-- end #receipt -->
+
+  <!-- Jagged bottom edge -->
+  <div class="paper-edge"></div>
+  <div style="height:180px;"></div><!-- spacer above printer -->
+</div><!-- end receipt-container -->
+
+<!-- Scroll to top -->
+<div id="scroll-top-wrap">
+  <div id="scroll-top-tooltip">👆 back to top!</div>
+  <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+</div>
+
+<!-- Rating popup -->
+<div id="overlay" onclick="closeRating()"></div>
+<div id="rating-popup">
+  <div style="font-size:13px;color:#aaa;font-family:'Special Elite',monospace;letter-spacing:1px;margin-bottom:4px;">RATE THIS EPORTFOLIO</div>
+  <h3>How did I do? 🌱</h3>
+  <div class="stars">
+    <button class="star-btn" onclick="rate(1)">⭐</button>
+    <button class="star-btn" onclick="rate(2)">⭐</button>
+    <button class="star-btn" onclick="rate(3)">⭐</button>
+    <button class="star-btn" onclick="rate(4)">⭐</button>
+    <button class="star-btn" onclick="rate(5)">⭐</button>
+  </div>
+  <div class="rating-msg" id="rating-msg"></div>
+  <button class="close-rating" onclick="closeRating()">close</button>
+</div>
+
+<script>
+let printing = false;
+let currentSection = 0;
+const totalSections = 14;
+const SECTION_DELAY = 350;
+
+function startPrinting() {
+  if (printing) return;
+  printing = true;
+
+  const titlePage = document.getElementById('title-page');
+  const receiptContainer = document.getElementById('receipt-container');
+  const printerWrap = document.getElementById('printer-wrap');
+  const printingStatus = document.getElementById('printing-status');
+  const scrollBtn = document.getElementById('scroll-top-wrap');
+
+  titlePage.classList.add('slide-away');
+
+  setTimeout(() => {
+    receiptContainer.style.display = 'flex';
+    printerWrap.style.display = 'flex';
+    printingStatus.style.display = 'block';
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+
+    let sectionIndex = 0;
+    const allSections = document.querySelectorAll('[data-section]');
+
+    function revealNext() {
+      if (sectionIndex >= allSections.length) {
+        printingStatus.style.display = 'none';
+        scrollBtn.style.display = 'flex';
+        return;
+      }
+      const el = allSections[sectionIndex];
+      el.classList.add('visible');
+      sectionIndex++;
+
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+      setTimeout(revealNext, SECTION_DELAY);
+    }
+
+    setTimeout(revealNext, 400);
+  }, 700);
+}
+
+function backToTitle() {
+  const titlePage = document.getElementById('title-page');
+  const receiptContainer = document.getElementById('receipt-container');
+  const scrollBtn = document.getElementById('scroll-top-wrap');
+
+  titlePage.style.transition = 'none';
+  titlePage.style.transform = 'translateY(-100%)';
+
+  window.scrollTo({ top: 0 });
+
+  setTimeout(() => {
+    titlePage.style.transition = 'transform 0.7s cubic-bezier(0.77,0,0.18,1)';
+    titlePage.classList.remove('slide-away');
+    titlePage.style.transform = '';
+    receiptContainer.style.display = 'none';
+    scrollBtn.style.display = 'none';
+
+    const allSections = document.querySelectorAll('[data-section]');
+    allSections.forEach(s => s.classList.remove('visible'));
+    printing = false;
+  }, 100);
+}
+
+function showRating() {
+  const popup = document.getElementById('rating-popup');
+  const overlay = document.getElementById('overlay');
+  document.getElementById('rating-msg').textContent = '';
+  document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('lit'));
+  overlay.style.display = 'block';
+  popup.style.display = 'block';
+  setTimeout(() => popup.classList.add('show'), 10);
+}
+
+function closeRating() {
+  const popup = document.getElementById('rating-popup');
+  const overlay = document.getElementById('overlay');
+  popup.classList.remove('show');
+  setTimeout(() => {
+    popup.style.display = 'none';
+    overlay.style.display = 'none';
+  }, 300);
+}
+
+function rate(stars) {
+  const msg = document.getElementById('rating-msg');
+  const btns = document.querySelectorAll('.star-btn');
+  btns.forEach((b, i) => {
+    if (i < stars) b.classList.add('lit');
+    else b.classList.remove('lit');
+  });
+  if (stars >= 4) {
+    msg.textContent = 'Salamuchhh!! 🌸🌿';
+    msg.style.color = '#3d7a3f';
+  } else {
+    msg.textContent = 'Aughrighttt k 😅';
+    msg.style.color = '#c06';
+  }
+}
+
+window.addEventListener('scroll', () => {
+  const scrollBtn = document.getElementById('scroll-top-wrap');
+  if (window.scrollY > 300 && document.getElementById('receipt-container').style.display !== 'none') {
+    scrollBtn.style.display = 'flex';
+  } else if (window.scrollY <= 300) {
+    scrollBtn.style.display = 'none';
+  }
+});
+</script>
+</body>
+</html>
