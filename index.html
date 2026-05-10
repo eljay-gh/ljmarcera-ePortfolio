@@ -554,63 +554,44 @@
     z-index: 998;
   }
 
-  /* Receipt paper edge - jagged bottom */
+  /* Receipt paper edge - torn jagged bottom */
   .paper-edge {
     width: var(--receipt-width);
-    height: 16px;
-    background: var(--paper);
-    border-left: 1.5px solid #e0ddd5;
-    border-right: 1.5px solid #e0ddd5;
-    clip-path: polygon(
-      0% 0%, 3% 100%, 6% 0%, 9% 100%, 12% 0%, 15% 100%,
-      18% 0%, 21% 100%, 24% 0%, 27% 100%, 30% 0%, 33% 100%,
-      36% 0%, 39% 100%, 42% 0%, 45% 100%, 48% 0%, 51% 100%,
-      54% 0%, 57% 100%, 60% 0%, 63% 100%, 66% 0%, 69% 100%,
-      72% 0%, 75% 100%, 78% 0%, 81% 100%, 84% 0%, 87% 100%,
-      90% 0%, 93% 100%, 96% 0%, 100% 100%, 100% 0%
-    );
+    height: 20px;
+    background-color: var(--green-pale); /* green shows through the teeth gaps */
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20'%3E%3Cpolygon points='0,0 10,20 20,0' fill='%23fffef9'/%3E%3C/svg%3E");
+    background-repeat: repeat-x;
+    background-position: top left;
+    background-size: 20px 20px;
   }
 
   /* Scroll to top btn */
   #scroll-top-wrap {
-    position: fixed;
-    bottom: 160px;
-    right: 20px;
-    z-index: 60;
-    display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
+    display: none; /* hidden, replaced by reprint-me */
   }
-  #scroll-top-tooltip {
+  #reprint-wrap {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    height: 180px; /* matches the spacer height above printer */
+    width: 100%;
+  }
+  #reprint-btn {
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-family: 'Caveat', cursive;
+    font-size: 17px;
+    cursor: pointer;
+    border: 2px solid var(--green);
     background: white;
     color: var(--green);
-    border: 1.5px solid var(--green-light);
-    border-radius: 20px;
-    padding: 4px 10px;
-    font-family: 'Caveat', cursive;
-    font-size: 13px;
-    white-space: nowrap;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    animation: tooltip-bounce 2s ease-in-out infinite;
-    pointer-events: none;
+    transition: all 0.2s;
+    box-shadow: 0 2px 8px rgba(61,122,63,0.12);
   }
-  @keyframes tooltip-bounce {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-4px); }
+  #reprint-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(61,122,63,0.2);
   }
-  #scroll-top {
-    background: var(--green);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px; height: 40px;
-    font-size: 18px;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    transition: transform 0.2s;
-  }
-  #scroll-top:hover { transform: scale(1.1); }
 
   /* Printing animation */
   @keyframes paper-feed {
@@ -914,22 +895,25 @@
       <div style="font-family:'Special Elite',monospace;font-size:9px;color:#ccc;letter-spacing:3px;">LJ-MARCERA-SUSAG2-2026</div>
 
       <div class="end-buttons">
-        <button class="end-btn primary" onclick="backToTitle()">↑ Back to title</button>
+        <button class="end-btn primary" onclick="document.getElementById('receipt-container').scrollIntoView({behavior:'smooth'})">💛 know me</button>
         <button class="end-btn" onclick="showRating()">⭐ Rate this</button>
       </div>
     </div>
 
   </div><!-- end #receipt -->
 
-  <!-- Jagged bottom edge -->
+  <!-- Jagged torn bottom edge -->
   <div class="paper-edge"></div>
-  <div style="height:180px;"></div><!-- spacer above printer -->
+
+  <div id="reprint-wrap">
+    <button id="reprint-btn" onclick="backToTitle()">reprint me</button>
+  </div>
 </div><!-- end receipt-container -->
 
-<!-- Scroll to top -->
-<div id="scroll-top-wrap">
-  <div id="scroll-top-tooltip">👆 back to top!</div>
-  <button id="scroll-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+<!-- hidden old scroll-top (kept for JS compatibility) -->
+<div id="scroll-top-wrap" style="display:none;">
+  <div id="scroll-top-tooltip"></div>
+  <button id="scroll-top"></button>
 </div>
 
 <!-- Rating popup -->
@@ -963,6 +947,7 @@ function startPrinting() {
   const printerWrap = document.getElementById('printer-wrap');
   const printingStatus = document.getElementById('printing-status');
   const scrollBtn = document.getElementById('scroll-top-wrap');
+  const reprintWrap = document.getElementById('reprint-wrap');
 
   titlePage.classList.add('slide-away');
 
@@ -978,7 +963,7 @@ function startPrinting() {
     function revealNext() {
       if (sectionIndex >= allSections.length) {
         printingStatus.style.display = 'none';
-        scrollBtn.style.display = 'flex';
+        reprintWrap.style.display = 'flex';
         return;
       }
       const el = allSections[sectionIndex];
@@ -997,6 +982,7 @@ function backToTitle() {
   const titlePage = document.getElementById('title-page');
   const receiptContainer = document.getElementById('receipt-container');
   const scrollBtn = document.getElementById('scroll-top-wrap');
+  const reprintWrap = document.getElementById('reprint-wrap');
 
   titlePage.style.transition = 'none';
   titlePage.style.transform = 'translateY(-100%)';
@@ -1009,6 +995,7 @@ function backToTitle() {
     titlePage.style.transform = '';
     receiptContainer.style.display = 'none';
     scrollBtn.style.display = 'none';
+    reprintWrap.style.display = 'none';
 
     const allSections = document.querySelectorAll('[data-section]');
     allSections.forEach(s => s.classList.remove('visible'));
@@ -1116,14 +1103,6 @@ function rate(stars) {
   });
 })();
 
-window.addEventListener('scroll', () => {
-  const scrollBtn = document.getElementById('scroll-top-wrap');
-  if (window.scrollY > 300 && document.getElementById('receipt-container').style.display !== 'none') {
-    scrollBtn.style.display = 'flex';
-  } else if (window.scrollY <= 300) {
-    scrollBtn.style.display = 'none';
-  }
-});
 </script>
 </body>
 </html>
