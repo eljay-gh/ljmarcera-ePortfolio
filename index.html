@@ -1088,6 +1088,10 @@ function rate(stars) {
     if (i < stars) b.classList.add('lit');
     else b.classList.remove('lit');
   });
+
+  // Lock stars immediately after first click so they can't change/spam
+  document.getElementById('stars-row').classList.add('locked');
+
   if (stars >= 4) {
     msg.textContent = 'Salamuchhh!! 🌸🌿';
     msg.style.color = '#3d7a3f';
