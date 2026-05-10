@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LJ Marcera — SusAg 2 ePortfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Special+Elite&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init('gZJg15jHT8KbG8L0t');</script>
 <style>
   :root {
     --green: #3d7a3f;
@@ -545,6 +547,40 @@
     text-decoration: underline;
     font-family: 'DM Sans', sans-serif;
   }
+  .rater-name-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .rater-name-wrap label {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .rater-name-input {
+    font-family: 'Caveat', cursive;
+    font-size: 20px;
+    border: none;
+    border-bottom: 2px solid var(--green-light);
+    outline: none;
+    width: 130px;
+    padding: 2px 4px;
+    color: var(--green);
+    background: transparent;
+    transition: border-color 0.2s;
+  }
+  .rater-name-input:focus {
+    border-bottom-color: var(--green);
+  }
+  .stars.locked .star-btn {
+    cursor: not-allowed;
+    opacity: 0.4;
+    filter: grayscale(1);
+    transform: none !important;
+  }
 
   #overlay {
     display: none;
@@ -921,7 +957,11 @@
 <div id="rating-popup">
   <div style="font-size:13px;color:#aaa;font-family:'Special Elite',monospace;letter-spacing:1px;margin-bottom:4px;">RATE THIS EPORTFOLIO</div>
   <h3>How did I do? 🌱</h3>
-  <div class="stars">
+  <div class="rater-name-wrap">
+    <label for="rater-name">Hi!</label>
+    <input id="rater-name" class="rater-name-input" type="text" placeholder="type your name" maxlength="40" oninput="onNameInput(this.value)"/>
+  </div>
+  <div class="stars locked" id="stars-row">
     <button class="star-btn" onclick="rate(1)">⭐</button>
     <button class="star-btn" onclick="rate(2)">⭐</button>
     <button class="star-btn" onclick="rate(3)">⭐</button>
@@ -1007,6 +1047,8 @@ function showRating() {
   const popup = document.getElementById('rating-popup');
   const overlay = document.getElementById('overlay');
   document.getElementById('rating-msg').textContent = '';
+  document.getElementById('rater-name').value = '';
+  document.getElementById('stars-row').classList.add('locked');
   document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('lit'));
   overlay.style.display = 'block';
   popup.style.display = 'block';
@@ -1023,9 +1065,25 @@ function closeRating() {
   }, 300);
 }
 
+function onNameInput(val) {
+  const starsRow = document.getElementById('stars-row');
+  if (val.trim().length >= 2) {
+    starsRow.classList.remove('locked');
+  } else {
+    starsRow.classList.add('locked');
+    document.querySelectorAll('.star-btn').forEach(b => b.classList.remove('lit'));
+    document.getElementById('rating-msg').textContent = '';
+  }
+}
+
 function rate(stars) {
+  // block if stars are still locked
+  if (document.getElementById('stars-row').classList.contains('locked')) return;
+
   const msg = document.getElementById('rating-msg');
   const btns = document.querySelectorAll('.star-btn');
+  const name = document.getElementById('rater-name').value.trim() || 'Someone';
+
   btns.forEach((b, i) => {
     if (i < stars) b.classList.add('lit');
     else b.classList.remove('lit');
@@ -1037,6 +1095,16 @@ function rate(stars) {
     msg.textContent = 'Aughrighttt k 😅';
     msg.style.color = '#c06';
   }
+
+  // Send email notification via EmailJS
+  emailjs.send('service_lxuv56t', 'template_abkafye', {
+    stars: stars,
+    name: name
+  }).then(() => {
+    console.log('Rating notification sent!');
+  }).catch((err) => {
+    console.error('Email failed:', err);
+  });
 }
 
 // ── Scattered background stickers ──
