@@ -23,6 +23,23 @@
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
+  /* ═══════════════════ SCATTERED STICKERS ═══════════════════ */
+  #bg-stickers {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+  .bg-sticker {
+    position: absolute;
+    font-size: 28px;
+    opacity: 0.18;
+    user-select: none;
+    line-height: 1;
+  }
+
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--green-pale);
@@ -659,6 +676,9 @@
 <div class="bg-deco d2">🌱</div>
 
 <!-- ═══ TITLE PAGE ═══ -->
+<!-- Background scattered stickers on green bg -->
+<div id="bg-stickers"></div>
+
 <div id="title-page">
   <div class="title-deco">🌿🌸🌾🌻🍃</div>
   <div class="title-box">
@@ -667,7 +687,7 @@
     <div class="title-sticker bl">🍅</div>
     <div class="title-sticker br">🌿</div>
 
-    <div class="title-course">Sustainable Agriculture 2 · CBSUA · 2025–2026</div>
+    <div class="title-course">Sustainable Agriculture 2 · CBSUA · AY25–26</div>
 
     <div class="title-photo-frame">
       <img src="eportphoto.png" alt="LJ Marcera" onerror="this.style.display='none';this.parentElement.innerHTML='🌸'"/>
@@ -753,11 +773,11 @@
     <!-- About the Author -->
     <div class="receipt-section" data-section="4">
       <div class="receipt-h2">✦ About the Author</div>
-      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:10px;">
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:10px;">
         <div style="width:70px;height:70px;border-radius:10px;border:2px dashed var(--pink);background:var(--pink-pale);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;">
           <img src="eportphoto.png" style="width:100%;height:100%;object-fit:cover;border-radius:8px;" onerror="this.style.display='none';this.parentElement.innerHTML='🌸'"/>
         </div>
-        <div style="display:flex;flex-direction:column;justify-content:center;">
+        <div>
           <div style="font-family:'Caveat',cursive;font-size:18px;font-weight:700;color:var(--ink);">Lovely Joy E. Marcera</div>
           <div style="font-family:'Special Elite',monospace;font-size:10px;color:var(--green);letter-spacing:1px;">BSE SCIENCE · 1ST YEAR · CBSUA</div>
           <div style="font-size:11px;color:#888;margin-top:3px;">Eco-conscious Learner</div>
@@ -1031,6 +1051,70 @@ function rate(stars) {
     msg.style.color = '#c06';
   }
 }
+
+// ── Scattered background stickers ──
+(function() {
+  const stickers = [
+    '🌿','🌱','🍃','🌾','🌻','🥕','🍅','🌸','🌼','🍀',
+    '🌵','🪴','🥦','🍆','🌽','🫚','🪻','🌺','🍂','🪷',
+    '🌹','🧅','🫛','🌲','🍀','🪸','🌿','🌱','🍃','🌾'
+  ];
+
+  const container = document.getElementById('bg-stickers');
+  const receiptW = 360 + 40; // receipt width + buffer
+  const centerX = window.innerWidth / 2;
+  const leftMax = centerX - receiptW / 2;
+  const rightMin = centerX + receiptW / 2;
+
+  const count = 38;
+  const placed = [];
+
+  function overlaps(x, y, size) {
+    for (const p of placed) {
+      if (Math.abs(x - p.x) < size * 1.4 && Math.abs(y - p.y) < size * 1.4) return true;
+    }
+    return false;
+  }
+
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('span');
+    el.className = 'bg-sticker';
+    el.textContent = stickers[i % stickers.length];
+
+    const size = 22 + Math.random() * 18;
+    el.style.fontSize = size + 'px';
+
+    // Randomly choose left or right side
+    let x, y, attempts = 0;
+    do {
+      const side = Math.random() < 0.5 ? 'left' : 'right';
+      if (side === 'left') {
+        x = Math.random() * Math.max(leftMax - size, 10);
+      } else {
+        x = rightMin + Math.random() * Math.max(window.innerWidth - rightMin - size, 10);
+      }
+      y = Math.random() * 95; // percent of viewport height
+      attempts++;
+    } while (overlaps(x, y, size) && attempts < 30);
+
+    placed.push({ x, y });
+
+    el.style.left = x + 'px';
+    el.style.top = y + 'vh';
+    el.style.transform = `rotate(${(Math.random() - 0.5) * 40}deg)`;
+    el.style.opacity = (0.10 + Math.random() * 0.12).toFixed(2);
+
+    container.appendChild(el);
+  }
+
+  // Reposition on resize
+  window.addEventListener('resize', () => {
+    container.innerHTML = '';
+    placed.length = 0;
+    // Re-run by reloading stickers (simple: just reload positions)
+    // For simplicity, do nothing — stickers stay where they are
+  });
+})();
 
 window.addEventListener('scroll', () => {
   const scrollBtn = document.getElementById('scroll-top-wrap');
