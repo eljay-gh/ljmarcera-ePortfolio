@@ -955,16 +955,12 @@
 <!-- Rating popup -->
 <div id="overlay" onclick="closeRating()"></div>
 <div id="rating-popup">
-  <div style="display:flex; flex-direction:column; align-items:center; gap:4px; margin-bottom:10px;">
-    <div style="display:flex; align-items:center; gap:6px;">
-      <input style="width:180px; border:none; border-bottom:1px solid #aaa; outline:none; font-family:'Special Elite',monospace; font-size:13px; background:transparent; text-align:center;" type="text" placeholder="RATE THIS EPORTFOLIO" disabled/>
-    </div>
-    <div style="display:flex; align-items:flex-end; gap:6px;">
-      <label style="font-size:1em; font-family:inherit; font-weight:normal; font-style:normal; color:inherit;">Hi!</label>
-      <input id="rater-name" class="rater-name-input" style="width:140px;" type="text" placeholder="type your name" maxlength="40" oninput="onNameInput(this.value)"/>
-    </div>
-    <div style="display:flex; align-items:center; gap:6px;">
-      <h3 style="margin:0;">How did I do? 🌱</h3>
+  <div style="font-size:13px;color:#aaa;font-family:'Special Elite',monospace;letter-spacing:1px;margin-bottom:4px;">RATE THIS PROFILE</div>
+  <div class="rater-name-wrap">
+    <label for="rater-name">Hi!</label>
+    <input id="rater-name" class="rater-name-input" type="text" placeholder="type your name" maxlength="40" oninput="onNameInput(this.value)"/>
+  </div>
+  <h3>How did I do? 🌱</h3>
     </div>
   </div>
   <div class="stars locked" id="stars-row">
