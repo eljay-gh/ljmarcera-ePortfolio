@@ -955,11 +955,17 @@
 <!-- Rating popup -->
 <div id="overlay" onclick="closeRating()"></div>
 <div id="rating-popup">
-  <div style="font-size:13px;color:#aaa;font-family:'Special Elite',monospace;letter-spacing:1px;margin-bottom:4px;">RATE THIS EPORTFOLIO</div>
-  <h3>How did I do? 🌱</h3>
-  <div class="rater-name-wrap">
-    <label for="rater-name">Hi!</label>
-    <input id="rater-name" class="rater-name-input" type="text" placeholder="type your name" maxlength="40" oninput="onNameInput(this.value)"/>
+  <div style="display:flex; flex-direction:column; align-items:flex-start; gap:4px; margin-bottom:10px;">
+    <div style="display:flex; align-items:center; gap:6px;">
+      <input style="width:180px; border:none; border-bottom:1px solid #aaa; outline:none; font-family:'Special Elite',monospace; font-size:13px;" type="text" placeholder="RATE THIS EPORTFOLIO" disabled/>
+    </div>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <label style="font-family:'Special Elite',monospace; font-size:13px; color:#aaa;">Hi!</label>
+      <input id="rater-name" class="rater-name-input" style="width:150px;" type="text" placeholder="type your name" maxlength="40" oninput="onNameInput(this.value)"/>
+    </div>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <h3 style="margin:0; padding-left:10px;">How did I do? 🌱</h3>
+    </div>
   </div>
   <div class="stars locked" id="stars-row">
     <button class="star-btn" onclick="rate(1)">⭐</button>
@@ -1092,12 +1098,21 @@ function rate(stars) {
   // Lock stars immediately after first click so they can't change/spam
   document.getElementById('stars-row').classList.add('locked');
 
-  if (stars >= 4) {
-    msg.textContent = 'Salamuchhh!! 🌸🌿';
-    msg.style.color = '#3d7a3f';
+  if (stars === 5) {
+    msg.textContent = 'Salamuchhh!! 🥰🌸🌿';
+    msg.style.color = '#b8860b';
+  } else if (stars === 4) {
+    msg.textContent = 'matsala puu 🤗🙌';
+    msg.style.color = '#5a9e5c';
+  } else if (stars === 3) {
+    msg.textContent = 'Aughrighttt k 😅🥹';
+    msg.style.color = '#e0a800';
+  } else if (stars === 2) {
+    msg.textContent = 'omkii😭🥺';
+    msg.style.color = '#e06020';
   } else {
-    msg.textContent = 'Aughrighttt k 😅';
-    msg.style.color = '#c06';
+    msg.textContent = 'k lang hahah 😖💔';
+    msg.style.color = '#cc0066';
   }
 
   // Send email notification via EmailJS
